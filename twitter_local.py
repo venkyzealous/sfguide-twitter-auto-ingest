@@ -41,7 +41,7 @@ def consumer():
 
         if total_count % 2 == 0:
             print(".", end="")
-        if total_count % 100 == 0:
+        if total_count % 1 == 0:
             print("{0} tweets retrieved".format(str(total_count)))
             filename = f"tweets_{datetime.now().strftime('%Y%m%d%H%M%S')}.json"
             print(f"==> writing {str(len(tweet_list))} records to {filename}")
@@ -58,7 +58,9 @@ def consumer():
             os.remove(filename)
 
 
-class JSONStreamProducer(tweepy.StreamListener):
+
+
+class JSONStreamProducer(tweepy.Stream):
 
     def on_data(self, data):
         pipeline.put(data)
@@ -70,14 +72,22 @@ class JSONStreamProducer(tweepy.StreamListener):
     def on_error(self, status):
         print("Error: " + str(status))
 
+    def on_connection_error(self):
+        self.disconnect()
+    def on_exception(exception):
+        print(exception) 
+
 
 if __name__ == "__main__":
     consumer_key = sys.argv[1]
     consumer_secret = sys.argv[2]
     access_token = sys.argv[3]
     access_token_secret = sys.argv[4]
+    bearer_token=""
     bucket = sys.argv[5]
     keyword = "#" + sys.argv[6]
+
+    tweepy.debug(True)
 
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
@@ -85,13 +95,24 @@ if __name__ == "__main__":
     pipeline = queue.Queue()
     event = threading.Event()
 
-    myListener = JSONStreamProducer()
-    myStream = tweepy.Stream(auth=auth, listener=myListener)
+
+
+    
+    ##myListener = JSONStreamProducer()
+    #myStream = tweepy.Stream(auth=auth, listener=myListener)
+    myStream = JSONStreamProducer(consumer_key, consumer_secret,access_token, access_token_secret)
 
     t = threading.Thread(target=consumer)
 
-    myStream.filter(track=[keyword], is_async=True)
+    #myStream.filter(track=[keyword], threaded=False)
+    #myStream.sample()
     t.start()
+
+    client = tweepy.Client(bearer_token,consumer_key, consumer_secret,access_token, access_token_secret)
+    response = client.get_users_mentions("6463042")
+    pipeline.put(response)
+
+    print(response)
 
     time.sleep(900)
     event.set()

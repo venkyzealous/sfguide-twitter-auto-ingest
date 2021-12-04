@@ -20,10 +20,10 @@ Create external S3 stage pointing to the S3 buckets storing the tweets
 *********************************************************************************/
 
 CREATE or replace STAGE twitter_db.public.tweets
-    URL = 's3://my-twitter-bucket/'
-    CREDENTIALS = (AWS_KEY_ID = 'xxxxxxxxxxxxxxxxxxxx'
-    AWS_SECRET_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-    file_format=(type='JSON')
+    URL = 's3://venkyzealous-twitter-bucket/'
+    CREDENTIALS = (AWS_KEY_ID = 'xxx'
+    AWS_SECRET_KEY = 'xxx')
+    file_format=(type='CSV')
     COMMENT = 'Tweets stored in S3';
 
 

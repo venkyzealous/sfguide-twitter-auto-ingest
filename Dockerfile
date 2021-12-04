@@ -7,16 +7,16 @@ RUN pip install --no-cache-dir datetime
 
 
     #get your AWS Access keys: https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html
-ENV AWS_Access_Key_ID="********************"\
-    AWS_Secret_Access_Key="****************************************"\
+ENV AWS_Access_Key_ID="x"\
+    AWS_Secret_Access_Key="x"\
     #get your Twitter API Key and Secret https://developer.twitter.com/en/apply-for-access
-    consumer_key="*************************"\
-    consumer_secret="**************************************************"\
+    consumer_key="x"\
+    consumer_secret="x"\
     # get your Twitter Access Token and Secret https://developer.twitter.com/en/apply-for-access
-    access_token="**************************************************"\
-    access_token_secret="*********************************************"\
+    access_token="x"\
+    access_token_secret="x"\
     #AWS bucket name
-    bucket="my-twitter-bucket"\
+    bucket="venkyzealous-twitter-bucket"\
     # specify your own default twitter keyword here. 
     keyword="covid19"
 
